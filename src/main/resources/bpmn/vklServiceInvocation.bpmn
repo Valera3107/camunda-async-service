@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1i3pz9i" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.6.0">
+  <bpmn:process id="asynchronousVklInvocation" name="asynchronous Vkl Invocation" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_08077w9</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_08l1dd1">
+      <bpmn:incoming>Flow_0sgylod</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_08077w9" sourceRef="StartEvent_1" targetRef="waitStateBefore" />
+    <bpmn:sequenceFlow id="Flow_1v761k7" sourceRef="waitStateBefore" targetRef="serviceTaskActivity" />
+    <bpmn:sequenceFlow id="Flow_1lqog2s" sourceRef="serviceTaskActivity" targetRef="waitStateAfter" />
+    <bpmn:sequenceFlow id="Flow_0sgylod" sourceRef="waitStateAfter" targetRef="Event_08l1dd1" />
+    <bpmn:serviceTask id="serviceTaskActivity" name="Асинхронное взаимодействие с VKL" camunda:class="com.layo.kafkaexample.config.AsynchronousServiceTask">
+      <bpmn:incoming>Flow_1v761k7</bpmn:incoming>
+      <bpmn:outgoing>Flow_1lqog2s</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="waitStateBefore" name="Wait State Before">
+      <bpmn:incoming>Flow_08077w9</bpmn:incoming>
+      <bpmn:outgoing>Flow_1v761k7</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="waitStateAfter" name="Wait State After">
+      <bpmn:incoming>Flow_1lqog2s</bpmn:incoming>
+      <bpmn:outgoing>Flow_0sgylod</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="asynchronousVklInvocation">
+      <bpmndi:BPMNEdge id="Flow_08077w9_di" bpmnElement="Flow_08077w9">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="310" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1v761k7_di" bpmnElement="Flow_1v761k7">
+        <di:waypoint x="410" y="117" />
+        <di:waypoint x="520" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lqog2s_di" bpmnElement="Flow_1lqog2s">
+        <di:waypoint x="620" y="117" />
+        <di:waypoint x="700" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0sgylod_di" bpmnElement="Flow_0sgylod">
+        <di:waypoint x="800" y="117" />
+        <di:waypoint x="902" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_08l1dd1_di" bpmnElement="Event_08l1dd1">
+        <dc:Bounds x="902" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0hi4sx0_di" bpmnElement="waitStateBefore">
+        <dc:Bounds x="310" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_061qay4_di" bpmnElement="waitStateAfter">
+        <dc:Bounds x="700" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_13jjn8y_di" bpmnElement="serviceTaskActivity">
+        <dc:Bounds x="520" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

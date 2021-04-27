@@ -1,0 +1,53 @@
+example:
+  kafka:
+    consumer-enabled: ${consumer-enabled:true}
+spring:
+  datasource:
+    url: jdbc:h2:mem:camunda;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: sa
+    driverClassName: org.h2.Driver
+  kafka:
+    bootstrap-servers: ${kafka_bootstrap_servers:localhost:9092}
+    properties:
+      sasl:
+        jaas:
+          config: org.apache.kafka.common.security.plain.PlainLoginModule required username=${kafka_username:'admin'} password=${kafka_password:'admin-secret'};
+        mechanism: PLAIN
+      security:
+        protocol: SASL_PLAINTEXT
+    consumer:
+      auto-offset-reset: earliest
+      group-id: vkl-adapter
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      max-poll-records: 1
+      fetch-max-wait: 360000
+      enable-auto-commit: false
+      client-id: vkl-adapter
+    producer:
+      client-id: vkl-adapter
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      retries: 2
+    jaas:
+      enabled: true
+    listener:
+      poll-timeout: 1800000
+      concurrency: 1
+      ack-mode: manual_immediate
+ubrr:
+  distancecredit:
+    config:
+      dbms_rest_url: http://localhost:8085/api
+      vkl_rest_url: http://localhost:8082/vkl
+    kafka-topics:
+      checkuserubp:
+        input-topic: INPUT_DATA
+        output-topic: OUTPUT_DATA
+server:
+  port:
+    8181
+camunda:
+  bpm:
+    history-level: audit
